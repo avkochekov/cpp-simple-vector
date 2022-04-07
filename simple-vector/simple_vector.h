@@ -93,19 +93,18 @@ public:
     // Если перед вставкой значения вектор был заполнен полностью,
     // вместимость вектора должна увеличиться вдвое, а для вектора вместимостью 0 стать равной 1
     Iterator Insert(ConstIterator pos, const Type& value) {
-        assert(pos >= begin() && pos < end());
+        assert(pos >= begin() && pos <= end());     // Нестрогое неравенство, т.к. может быть вставка в конец
         Iterator iter = Iterator(pos);
         Resize(size + 1);
         std::move_backward(iter, end(), end() + 1);
         *iter = value;
-        ++size;
+//        ++size;
         return iter;
     }
 
     Iterator Insert(Iterator pos, Type&& value) {
-        assert(pos >= begin() && pos < end());
+        assert(pos >= begin() && pos <= end());     // Нестрогое неравенство, т.к. может быть вставка в конец
         auto dist = std::distance(begin(), pos);
-//        Iterator tmp_end = Iterator(end());
         Resize(std::move(size + 1));
         std::move_backward(std::make_move_iterator(begin() + dist), std::make_move_iterator(end() - 1), end());
         std::exchange(*(begin() + dist), std::move(value));
