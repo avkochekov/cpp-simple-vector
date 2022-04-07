@@ -32,12 +32,13 @@ public:
 
     // Конструктор перемещения
     ArrayPtr(ArrayPtr&& other) {
-        raw_ptr_ = other.raw_ptr_;
+        raw_ptr_ = std::move(other.raw_ptr_);
+        other.raw_ptr_ = nullptr;
     };
 
     // Запрещаем присваивание
     ArrayPtr& operator=(ArrayPtr&& rhs){
-        raw_ptr_= std::exchange(rhs.raw_ptr_, nullptr);
+        swap(rhs.raw_ptr);
         return *this;
     };
 
